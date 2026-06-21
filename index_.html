@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Stop | Inspiring Art Classes in Southgate, London</title>
+    <meta name="description" content="Inspiring art classes for children and adults in Southgate.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- BOLD, BRIGHT ART PALETTE --- */
+        :root {
+            --red: #FF3B30;
+            --teal: #00C2CB;
+            --orange: #FF9500;
+            --yellow: #FFD60A;
+            --purple: #AF52DE;
+            --pink: #FF2D55;
+            --paper: #FFFDF9; /* Slightly warm paper color */
+            --dark-text: #1C1C1E;
+            
+            /* Arty Borders & Shadows */
+            --border-thick: 4px solid var(--dark-text);
+            --border-thin: 2px solid var(--dark-text);
+            --solid-shadow: 6px 6px 0px var(--dark-text);
+            --solid-shadow-hover: 10px 10px 0px var(--dark-text);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        .dark-theme {
+            --paper: #1C1C1E;
+            --dark-text: #FFFDF9;
+            --border-thick: 4px solid var(--dark-text);
+            --border-thin: 2px solid var(--dark-text);
+            --solid-shadow: 6px 6px 0px var(--dark-text);
+            --solid-shadow-hover: 10px 10px 0px var(--dark-text);
+        }
+
+        /* --- GLOBAL RESET & TYPOGRAPHY --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--paper);
+            color: var(--dark-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            /* Playful polka-dot background pattern */
+            background-image: radial-gradient(var(--dark-text) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-attachment: fixed;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        
+        /* Handwriting font for all headings */
+        h1, h2, h3, h4, h5, h6, .logo { 
+            font-family: 'Kalam', cursive; 
+            font-weight: 700; 
+            margin-bottom: 1rem; 
+            letter-spacing: 1px;
+        }
+        
+        a { text-decoration: none; color: inherit; transition: var(--transition); cursor: pointer; }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; display: block; border: var(--border-thick); border-radius: 8px; }
+
+        /* --- VIRTUAL PAGES LOGIC --- */
+        .page {
+            display: none;
+            min-height: 80vh;
+            padding-top: 120px;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .page.active { display: block; }
+        
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* --- LAYOUT UTILITIES --- */
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 4rem 0; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+        .text-center { text-align: center; }
+        .section-title { font-size: 3.5rem; margin-bottom: 3rem; text-align: center; text-transform: uppercase; transform: rotate(-2deg); }
+
+        /* --- ARTY BUTTONS --- */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: var(--border-thick);
+            transition: var(--transition);
+            text-transform: uppercase;
+            box-shadow: var(--solid-shadow);
+        }
+        .btn-primary { background-color: var(--teal); color: var(--dark-text); }
+        .btn-secondary { background-color: var(--red); color: #fff; border-color: var(--dark-text); }
+        .btn-yellow { background-color: var(--yellow); color: var(--dark-text); }
+        
+        .btn:hover { 
+            transform: translate(-4px, -4px) rotate(2deg); 
+            box-shadow: var(--solid-shadow-hover); 
+        }
+
+        /* --- CHUNKY NAVIGATION --- */
+        header.nav-wrapper {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: var(--paper);
+            border-bottom: var(--border-thick);
+            transition: var(--transition);
+        }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; }
+        .logo { font-size: 2.5rem; color: var(--red); display: flex; align-items: center; gap: 0.5rem; margin: 0; transform: rotate(-3deg);}
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { font-weight: 900; font-size: 1.1rem; color: var(--dark-text); padding: 0.5rem 1rem; border-radius: 8px; border: 2px solid transparent; }
+        .nav-links a:hover, .nav-links a.active-link { background: var(--yellow); border: var(--border-thin); transform: rotate(2deg); }
+        .hamburger { display: none; font-size: 2rem; cursor: pointer; color: var(--dark-text); }
+        .theme-toggle { background: var(--pink); border: var(--border-thick); box-shadow: 3px 3px 0px var(--dark-text); color: #fff; margin-left: 1rem; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
+        .theme-toggle:hover { transform: scale(1.1); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 80px;
+        }
+        .hero-box {
+            background: var(--yellow);
+            border: var(--border-thick);
+            box-shadow: 15px 15px 0px var(--dark-text);
+            border-radius: 16px;
+            padding: 4rem;
+            max-width: 800px;
+            text-align: center;
+            transform: rotate(-1deg);
+            z-index: 2;
+        }
+        .hero-box h1 { font-size: clamp(3.5rem, 6vw, 5.5rem); color: var(--dark-text); line-height: 1; margin-bottom: 1rem; }
+        .hero-box h1 span { color: var(--red); text-decoration: underline; text-decoration-style: wavy; }
+        .hero-box p { font-size: 1.3rem; font-weight: 700; margin-bottom: 2rem; }
+        .hero-btns { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+
+        /* --- ARTY CARDS --- */
+        .card { 
+            background: #fff; 
+            border: var(--border-thick); 
+            border-radius: 12px; 
+            padding: 2rem; 
+            box-shadow: var(--solid-shadow); 
+            transition: var(--transition); 
+            height: 100%; 
+            position: relative;
+        }
+        .card:hover { transform: translate(-5px, -5px) rotate(-1deg); box-shadow: var(--solid-shadow-hover); }
+        .card-icon { font-size: 3rem; margin-bottom: 1rem; display: inline-block; padding: 1rem; border-radius: 50%; border: var(--border-thick); }
+        
+        .color-1 { background: var(--teal); color: #fff; }
+        .color-2 { background: var(--pink); color: #fff; }
+        .color-3 { background: var(--purple); color: #fff; }
+        .color-4 { background: var(--orange); color: var(--dark-text); }
+
+        /* --- BLOG SECTION --- */
+        .blog-card { padding: 0; overflow: hidden; display: flex; flex-direction: column;}
+        .blog-card img { border: none; border-bottom: var(--border-thick); border-radius: 0; height: 250px; object-fit: cover; }
+        .blog-content { padding: 1.5rem; background: #fff; flex-grow: 1;}
+        .blog-tag { display: inline-block; background: var(--yellow); padding: 0.2rem 0.8rem; border: var(--border-thin); font-weight: 900; font-size: 0.8rem; text-transform: uppercase; transform: rotate(-3deg); margin-bottom: 1rem; }
+        .blog-title { font-size: 2rem; line-height: 1.2; margin-bottom: 1rem; }
+
+        /* --- GALLERY TAPE EFFECT --- */
+        .masonry { column-count: 3; column-gap: 2rem; }
+        .masonry-item { break-inside: avoid; margin-bottom: 2rem; position: relative; cursor: pointer; }
+        .masonry-item img { border: 10px solid #fff; box-shadow: var(--solid-shadow); border-radius: 0; }
+        /* Fake masking tape */
+        .masonry-item::before {
+            content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(-5deg);
+            width: 80px; height: 30px; background: rgba(255,255,255,0.7); border: 1px solid #ccc; z-index: 10;
+        }
+        .masonry-item:hover img { transform: scale(1.02) rotate(2deg); }
+
+        /* --- CONTACT SECTION --- */
+        .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+        .contact-info { background: var(--purple); color: #fff; border: var(--border-thick); box-shadow: var(--solid-shadow); padding: 3rem; border-radius: 12px; transform: rotate(1deg); }
+        .contact-info h3 { font-size: 3rem; }
+        .contact-info a { color: #fff; display: block; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 700; }
+        .contact-info i { width: 40px; font-size: 1.5rem; }
+        
+        .form-control { width: 100%; padding: 1rem; border: var(--border-thick); border-radius: 8px; background: #fff; font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 700; box-shadow: 4px 4px 0px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
+        .form-control:focus { outline: none; background: var(--yellow); }
+
+        /* --- FOOTER --- */
+        footer { background: var(--dark-text); color: var(--paper); padding: 4rem 5% 2rem; border-top: 8px solid var(--red); margin-top: 4rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .footer-col h4 { font-size: 2rem; color: var(--yellow); margin-bottom: 1.5rem; }
+        .footer-col ul li { margin-bottom: 0.8rem; font-weight: 700; }
+        .social-icons { display: flex; gap: 1rem; }
+        .social-icons a { width: 45px; height: 45px; border-radius: 50%; background: var(--paper); display: flex; align-items: center; justify-content: center; color: var(--dark-text); font-size: 1.5rem; transition: var(--transition); border: var(--border-thin); }
+        .social-icons a:hover { background: var(--teal); transform: translateY(-5px); }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 992px) {
+            .masonry { column-count: 2; }
+            .contact-wrap { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { position: fixed; top: 80px; left: -100%; flex-direction: column; background: var(--paper); width: 100%; height: calc(100vh - 80px); padding: 2rem; border-bottom: var(--border-thick); transition: 0.3s ease-in-out; align-items: center; justify-content: center; z-index: 999; }
+            .nav-links.active { left: 0; }
+            .nav-links a { font-size: 2rem; width: 80%; text-align: center; }
+            .hamburger { display: block; }
+            .hero-box { padding: 2rem; }
+            .hero-box h1 { font-size: 3rem; }
+            .masonry { column-count: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="nav-wrapper">
+        <nav>
+            <a href="#home" class="logo">
+                <i class="fa-solid fa-paint-roller"></i> Art Stop
+            </a>
+            <div class="nav-links" id="nav-links">
+                <a href="#home">Home</a>
+                <a href="#children">Children</a>
+                <a href="#adults">Adults</a>
+                <a href="#workshops">Workshops</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#blog">Blog</a>
+                <a href="#contact" class="btn btn-primary" style="color:var(--dark-text); font-family: 'Kalam', cursive; font-size:1.5rem;">Book Now!</a>
+            </div>
+            <div style="display:flex; align-items:center;">
+                <button class="theme-toggle" id="theme-btn"><i class="fa-solid fa-moon"></i></button>
+                <div class="hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="app-content">
+
+        <main id="page-home" class="page">
+            <section class="hero">
+                <div class="hero-box">
+                    <h1>Make a <span>Beautiful</span> Mess!</h1>
+                    <p>Inspiring, hands-on art classes for kids and adults in Southgate, London. Grab a brush, get sticky, and let your imagination run completely wild.</p>
+                    <div class="hero-btns">
+                        <a href="#contact" class="btn btn-secondary">Join a Class <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="#gallery" class="btn btn-yellow">See Our Art</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="container">
+                <h2 class="section-title">Why We Love Art</h2>
+                <div class="grid-4">
+                    <div class="card">
+                        <div class="card-icon color-1"><i class="fa-solid fa-palette"></i></div>
+                        <h3>Get Creative</h3>
+                        <p>We learn about famous painters and try crazy new techniques every week.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon color-2"><i class="fa-solid fa-face-smile"></i></div>
+                        <h3>Be Proud</h3>
+                        <p>There are no mistakes in art! We focus on building huge confidence.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon color-3"><i class="fa-solid fa-hands-bubbles"></i></div>
+                        <h3>Get Messy</h3>
+                        <p>Clay, glue, glitter, and paint. We handle the mess so your living room doesn't have to.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon color-4"><i class="fa-solid fa-users"></i></div>
+                        <h3>Make Friends</h3>
+                        <p>Small, noisy, happy classes where everyone supports each other.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <main id="page-children" class="page">
+            <section class="container">
+                <h2 class="section-title">Kids Classes</h2>
+                <div class="grid-2">
+                    <div class="card" style="border-color: var(--teal);">
+                        <h3 style="font-size: 2.5rem;"><i class="fa-solid fa-star" style="color:var(--yellow)"></i> Creative Stars (Ages 5-11)</h3>
+                        <p>Fun, action-packed weekly sessions where young artists discover their potential.</p>
+                        <ul style="margin: 2rem 0; font-weight: 700; font-size: 1.1rem; line-height: 2;">
+                            <li><i class="fa-solid fa-check" style="color:var(--red)"></i> Drawing, Painting & Mixed media</li>
+                            <li><i class="fa-solid fa-check" style="color:var(--teal)"></i> Sculpture & 3D cardboard engineering</li>
+                            <li><i class="fa-solid fa-check" style="color:var(--orange)"></i> Learning about artists from around the world</li>
+                        </ul>
+                        <a href="#contact" data-autofill="Creative Stars (Ages 5-11)" class="btn btn-primary class-book-btn">Book This Term</a>
+                    </div>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1594051052608-6e542cbcc7b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kids hands covered in bright paint" style="transform: rotate(2deg);">
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <main id="page-adults" class="page">
+            <section class="container">
+                <h2 class="section-title">Adult Classes</h2>
+                <div class="grid-2">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Adult painting on a canvas" style="transform: rotate(-2deg);">
+                    </div>
+                    <div class="card" style="border-color: var(--pink);">
+                        <h3 style="font-size: 2.5rem;">Take a Breath</h3>
+                        <p style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;">Mindful Art Sessions for Adults</p>
+                        <p>Reconnect with your creativity. Designed as a peaceful escape from the busy week, absolutely no prior art experience is needed!</p>
+                        <ul style="margin: 2rem 0; font-weight: 700; font-size: 1.1rem; line-height: 2;">
+                            <li><i class="fa-solid fa-droplet" style="color:var(--teal)"></i> Watercolour & Acrylics</li>
+                            <li><i class="fa-solid fa-pencil" style="color:var(--purple)"></i> Mindful, stress-free drawing</li>
+                            <li><i class="fa-solid fa-mug-hot" style="color:var(--orange)"></i> Tea, biscuits, and good company</li>
+                        </ul>
+                        <a href="#contact" data-autofill="Adult Mindful Art" class="btn btn-secondary class-book-btn">Join a Session</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <main id="page-workshops" class="page">
+            <section class="container">
+                <h2 class="section-title">Holiday Camps</h2>
+                <div class="grid-3">
+                    <div class="card">
+                        <h4 style="font-size: 1.8rem; color: var(--orange);">Oct 24 - 28</h4>
+                        <h3 style="font-size: 2.2rem;">Autumn Art Week</h3>
+                        <p>Leaf printing, spooky crafts, and warm mixed-media palettes.</p>
+                        <br>
+                        <a href="#contact" data-autofill="Autumn Art Week" class="btn btn-yellow class-book-btn">Book Place</a>
+                    </div>
+                    <div class="card">
+                        <h4 style="font-size: 1.8rem; color: var(--teal);">Dec 18 - 22</h4>
+                        <h3 style="font-size: 2.2rem;">Winter Wonderland</h3>
+                        <p>Cardboard snow globes, festive crafts, and painting winter landscapes.</p>
+                        <br>
+                        <a href="#contact" data-autofill="Winter Wonderland" class="btn btn-yellow class-book-btn">Book Place</a>
+                    </div>
+                    <div class="card">
+                        <h4 style="font-size: 1.8rem; color: var(--purple);">Feb 12 - 16</h4>
+                        <h3 style="font-size: 2.2rem;">Messy Masters</h3>
+                        <p>Picasso faces, Jackson Pollock splatters, and Pop Art prints.</p>
+                        <br>
+                        <a href="#contact" data-autofill="Messy Masters" class="btn btn-yellow class-book-btn">Book Place</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <main id="page-blog" class="page">
+            <section class="container">
+                <h2 class="section-title">The Art Blog</h2>
+                <div class="grid-3">
+                    <div class="card blog-card">
+                        <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Colorful paints">
+                        <div class="blog-content">
+                            <span class="blog-tag">Tips for Parents</span>
+                            <h3 class="blog-title">5 Ways to Encourage Messy Play at Home</h3>
+                            <p>Don't fear the paint! Here is how to set up a stress-free creative zone for your little ones...</p>
+                        </div>
+                    </div>
+                    <div class="card blog-card">
+                        <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Child painting">
+                        <div class="blog-content">
+                            <span class="blog-tag">Studio News</span>
+                            <h3 class="blog-title">Why We Love Cardboard Sculpting</h3>
+                            <p>It's free, it's sustainable, and it pushes kids to think in three dimensions.</p>
+                        </div>
+                    </div>
+                    <div class="card blog-card">
+                        <img src="https://images.unsplash.com/photo-1531322261070-e1ce0b1c0981?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Adult painting setup">
+                        <div class="blog-content">
+                            <span class="blog-tag">Adult Classes</span>
+                            <h3 class="blog-title">Overcoming the "Blank Page" Fear</h3>
+                            <p>Staring at a white canvas can be scary. Here are three warm-up exercises we use in class.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <main id="page-gallery" class="page">
+            <section class="container">
+                <h2 class="section-title">Our Masterpieces</h2>
+                <div class="masonry">
+                    <div class="masonry-item">
+                        <img src="https://images.unsplash.com/photo-1544365558-35aa4afcf11f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Watercolour art">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Creative project">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Abstract painting">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Mixed media art">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Child painting">
+                    </div>
+                    <div class="masonry-item">
+                        <img src="https://images.unsplash.com/photo-1531322261070-e1ce0b1c0981?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Kids artwork">
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <main id="page-contact" class="page">
+            <section class="container">
+                <h2 class="section-title">Say Hello!</h2>
+                <div class="contact-wrap">
+                    <div class="contact-info">
+                        <h3>Let's Chat</h3>
+                        <p style="font-size: 1.2rem; margin-bottom: 2rem; font-weight: 700;">Have a question or want to book a class? Send Lisa a message!</p>
+                        
+                        <a href="#"><i class="fa-solid fa-location-dot"></i> St Andrew's Church, Chase Side, N14 5PP</a>
+                        <a href="tel:+447700900077"><i class="fa-solid fa-phone"></i> +44 (0) 7700 900077</a>
+                        <a href="mailto:hello@artstop.co.uk"><i class="fa-solid fa-envelope"></i> hello@artstop.co.uk</a>
+                        
+                        <div class="social-icons" style="margin-top: 3rem;">
+                            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        </div>
+                    </div>
+                    <div class="card" style="transform: rotate(-1deg);">
+                        <form id="main-contact-form">
+                            <input type="text" class="form-control" required placeholder="Your Name">
+                            <input type="email" class="form-control" required placeholder="Your Email">
+                            <input type="text" id="form-class" class="form-control" placeholder="Which class? (Optional)">
+                            <textarea class="form-control" rows="5" required placeholder="Your message..."></textarea>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.5rem; font-family: 'Kalam', cursive;">Send Message!</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <footer>
+        <div class="container" style="padding: 0;">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h2 style="color:var(--red); font-size: 2.5rem;"><i class="fa-solid fa-paint-roller"></i> Art Stop</h2>
+                    <p>Inspiring art classes for all ages in Southgate, London.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#children">Kids Classes</a></li>
+                        <li><a href="#adults">Adult Classes</a></li>
+                        <li><a href="#blog">Art Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Studio Hours</h4>
+                    <ul>
+                        <li>Mon - Fri: 10am - 8pm</li>
+                        <li>Saturday: 9am - 4pm</li>
+                        <li>Sunday: Closed (Making a mess at home)</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem; border-top: 2px solid #333; padding-top: 1rem;">
+                <p style="font-family: 'Kalam', cursive; font-size: 1.2rem;">© 2026 Art Stop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- ROUTING ENGINE ---
+        const VALID_ROUTES = ['home', 'children', 'adults', 'workshops', 'gallery', 'blog', 'contact'];
+
+        function syncSPAView() {
+            const currentHash = window.location.hash.substring(1);
+            const targetView = VALID_ROUTES.includes(currentHash) ? currentHash : 'home';
+
+            VALID_ROUTES.forEach(route => {
+                const pageNode = document.getElementById(`page-${route}`);
+                if (pageNode) {
+                    if (route === targetView) {
+                        pageNode.classList.add('active');
+                    } else {
+                        pageNode.classList.remove('active');
+                    }
+                }
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(anchor => {
+                const targetHref = anchor.getAttribute('href');
+                if (targetHref === `#${targetView}`) {
+                    anchor.classList.add('active-link');
+                } else {
+                    anchor.classList.remove('active-link');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            document.getElementById('nav-links').classList.remove('active');
+            document.getElementById('hamburger').innerHTML = '<i class="fa-solid fa-bars"></i>';
+        }
+
+        window.addEventListener('hashchange', syncSPAView);
+        window.addEventListener('DOMContentLoaded', syncSPAView);
+
+        // --- BOOKING AUTO-FILL ---
+        document.body.addEventListener('click', (e) => {
+            const dynamicBookingBtn = e.target.closest('.class-book-btn');
+            if (dynamicBookingBtn) {
+                const intendedClassName = dynamicBookingBtn.getAttribute('data-autofill');
+                const targetFormSelector = document.getElementById('form-class');
+                if (intendedClassName && targetFormSelector) {
+                    targetFormSelector.value = intendedClassName;
+                }
+            }
+        });
+
+        // --- MOBILE MENU ---
+        const hamburgerElement = document.getElementById('hamburger');
+        const navigationLinksList = document.getElementById('nav-links');
+        
+        hamburgerElement.addEventListener('click', () => {
+            navigationLinksList.classList.toggle('active');
+            hamburgerElement.innerHTML = navigationLinksList.classList.contains('active') 
+                ? '<i class="fa-solid fa-xmark"></i>' 
+                : '<i class="fa-solid fa-bars"></i>';
+        });
+
+        // --- THEME TOGGLE ---
+        const themeToggleButton = document.getElementById('theme-btn');
+        themeToggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            const isActiveDarkTheme = document.body.classList.contains('dark-theme');
+            themeToggleButton.innerHTML = isActiveDarkTheme 
+                ? '<i class="fa-solid fa-sun" style="color:var(--dark-text)"></i>' 
+                : '<i class="fa-solid fa-moon"></i>';
+        });
+
+        // --- FORM SUBMISSION ---
+        document.getElementById('main-contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert("Thanks! Your message has been sent to the studio.");
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
